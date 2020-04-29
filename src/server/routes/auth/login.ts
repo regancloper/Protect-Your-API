@@ -6,7 +6,14 @@ import { CreateToken } from '../../utils/security/tokens';
 
 const router = express.Router();
 
-router.post('/', passport.authenticate('local'), async (req: any, res, next) => {
+interface reqUser extends express.Request {
+    user: {
+        id: number;
+        role: string;
+    }
+}
+
+router.post('/', passport.authenticate('local'), async (req: reqUser, res, next) => {
     try {
         await DB.Tokens.deleteExistingTokens(req.user.id);
         let token = await CreateToken({ userid: req.user.id });

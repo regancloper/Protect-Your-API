@@ -14,7 +14,7 @@ export const CreateToken = async (payload: IPayload) => {
 };
 
 export const ValidToken = async (token: string) => {
-    let payload: IPayload = <IPayload>jwt.decode(token);
+    let payload: IPayload = <IPayload>jwt.verify(token, config.auth.secret);
     let [accesstokenid] = await DB.Tokens.findOne(payload.accesstokenid, token);
     if (!accesstokenid) {
         throw new Error('Invalid Token!');

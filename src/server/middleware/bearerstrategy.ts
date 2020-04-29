@@ -9,6 +9,7 @@ passport.use(new BearerStrategy.Strategy(async (token, done) => {
         let payload = await ValidToken(token);
         let [user] = await DB.Users.findOneById(payload.userid);
         if (user) {
+            delete user.password;
             done(null, user);
         } else {
             done(null, false);

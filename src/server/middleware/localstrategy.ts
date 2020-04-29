@@ -14,11 +14,12 @@ passport.use(new LocalStrategy.Strategy({
     try {
         let [user]: any = await DB.Users.findOneByEmail(email);
         if (!user) {
-            return done(null, false, { message: 'Incorrect username.' });
+            return done(null, false, { message: 'Invalid credentials.' });
         }
         if (!ComparePassword(password, user.password)) {
-            return done(null, false, { message: 'Incorrect password.' });
+            return done(null, false, { message: 'Invalid credentials.' });
         }
+        delete user.password;
         return done(null, user);
     } catch (e) {
         done(e);
